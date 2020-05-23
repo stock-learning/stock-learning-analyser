@@ -24,7 +24,7 @@ def production(action_name='bvsp_test'):
     return functions.create_value_output(_test_y, _predict)  
 
 if __name__ == '__main__':
-    # training()
+    training()
     Y = production()
     print(f'Average hit: {Y["Hit"].mean()}') #Media de certo
     print(f'Total return value of our strategy:  R${Y["Investment_Value"].sum()}') # valor de retorno da estrategia
