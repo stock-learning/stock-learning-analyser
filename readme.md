@@ -1,5 +1,5 @@
 # Preparation of the environment
-* If you have Docker on the machine
+* If you have Docker on the machine <br>
     Open the console in the project folder and run the following commands:
     ```
     docker build -t chsponciano/stock-learning-analyser .
