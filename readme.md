@@ -7,7 +7,7 @@
     ```
 * If it is for development, follow the steps below:
     * Install python on the machine from the following link: [Python 3.8](https://www.python.org/downloads/)
-    * Install the python dependency manager [Pipy](https://pip.pypa.io/en/stable/installing/)
+    * Install the python dependency manager [Pip](https://pip.pypa.io/en/stable/installing/)
     * Install anaconda [Anaconda](https://anaconda.org/)
     * Install git [Git](https://git-scm.com/download)
     * Clone the repository for the machine, executing the commands below:
