@@ -1,6 +1,6 @@
 # Preparation of the environment
 * If you have Docker on the machine
-    ## Open the console in the project folder and run the following commands:
+    Open the console in the project folder and run the following commands:
     ```
     docker build -t chsponciano/stock-learning-analyser .
     docker run --name stock-learning-analyser chsponciano/stock-learning-analyser python /service-analyser/__init__.py start
