@@ -1,3 +1,4 @@
+# Author: Carlos Henrique Ponciano da Silva
 from dotenv import load_dotenv
 import os
 load_dotenv()

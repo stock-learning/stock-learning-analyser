@@ -1,2 +1,2 @@
-mongoimport --db predictions --collection gpsc --type csv --file GPSC_TRAIN.csv --headerline
-mongoimport --db predictions --collection gpsc_evol --type csv --file GPSC_EVOL.csv --headerline
+mongoimport --db predicts --collection bvsp_train --type csv --file bvsp_train.csv --headerline
+mongoimport --db predicts --collection bvsp_test --type csv --file bvsp_test.csv --headerline
