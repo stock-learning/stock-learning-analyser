@@ -3,7 +3,7 @@
     Open the console in the project folder and run the following commands:
     ```
     docker build -t chsponciano/stock-learning-analyser .
-    docker run --name stock-learning-analyser chsponciano/stock-learning-analyser python /service-analyser/__init__.py start
+    docker run --name analyser chsponciano/stock-learning-analyser python /service-analyser/__init__.py start
     ```
 * If it is for development, follow the steps below:
     * Install python on the machine from the following link: [Python 3.8](https://www.python.org/downloads/)
