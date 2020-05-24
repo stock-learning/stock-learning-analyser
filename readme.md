@@ -19,7 +19,7 @@
     ```
     MONGO_HOST = *MONGODB_HOST*
     MONGO_PORT = *MONGODB_PORT*
-    DATABASE= *MONGODB_DATABSE*
+    DATABASE = *MONGODB_DATABSE*
     ```
     * Create a new environment within anaconda and execute the following commands:
     ```
