@@ -15,6 +15,12 @@
     git clone https://github.com/stock-learning/stock-learning-analyser
     cd stock-learning-analyser
     ```
+    * Create the .env file inside the folder with the following content:
+    ```
+    MONGO_HOST = *MONGODB_HOST*
+    MONGO_PORT = *MONGODB_PORT*
+    DATABASE= *MONGODB_DATABSE*
+    ```
     * Create a new environment within anaconda and execute the following commands:
     ```
     activate *ENVIRONMENT_NAME*
