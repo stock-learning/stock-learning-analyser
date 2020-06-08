@@ -1,9 +1,9 @@
 # Author: Carlos Henrique Ponciano da Silva
 from stock_learning_rabbitmq.ApiStub import ApiStub
 from stock_learning_rabbitmq.RabbitMQServer import RabbitMQServer
-from daily_prediction_startup_handler import DailyPredictionStartupHandler
-from daily_prediction_closing_handler import DailyPredictionClosingHandler
-from real_time_value_addition_handler import RealTimeValueAdditionHandler
+from handler.daily_prediction_startup_handler import DailyPredictionStartupHandler
+from handler.daily_prediction_closing_handler import DailyPredictionClosingHandler
+from handler.real_time_value_addition_handler import RealTimeValueAdditionHandler
 from setting import get_env
 
 
