@@ -9,4 +9,7 @@ class DailyPredictionStartupHandler(Action):
         self.primitive_name = 'daily-prediction-startup-handler'
 
     def consume(self, message):
-        self.initialize_daily_prediction()
+        try:
+            self.initialize_daily_prediction()
+        except Exception as ex:
+            print(ex)

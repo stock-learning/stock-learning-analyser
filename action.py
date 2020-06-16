@@ -30,12 +30,29 @@ class Action:
         _data = functions.apply_standardization(_data)
         _action(_data, _stock_name)
 
+    def _save_predict(self, initials, output_predict):
+        self._api_stub.live_prediction({
+            'initials': initials,
+            'averageHit': output_predict['hit'].mean(),
+            'totalReturn': output_predict['investment_value'].sum(),
+            'buyHold': output_predict['return'].sum(),
+            'updateDate': functions.get_current_datatime()
+        })
+
+        for movement in output_predict['convert_movements']:
+            self._api_stub.live_prediction_movement({
+                'initials': initials,
+                'isSell': movement
+            })
+
     def _predict(self, data, stock):
+        _initials = functions.get_stock_name(stock)
         _test_x, _test_y = functions.get_only_normalized_values(data, return_real_value=True, to_numpy=False)
-        _model = neural_network.load(functions.get_stock_name(stock))
+        _model = neural_network.load(_initials)
         _predict = _model.predict(_test_x)
         _predict = functions.inverse_transform(_predict)
-        print(functions.create_value_output(_test_y, _predict))
+        _output_predict = functions.create_value_output(_test_y, _predict)
+        self._save_predict(_initials, _output_predict)
 
     def _train(self, data, stock, _epochs=1000, _batch_size=128, _verbose=0, _optimizer='adam', _loss='mean_squared_error'):
         _train_x, _train_y, _test_x, _test_y = functions.splitting(data)

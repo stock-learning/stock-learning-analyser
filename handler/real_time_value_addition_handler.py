@@ -9,4 +9,7 @@ class RealTimeValueAdditionHandler(Action):
         self.primitive_name = 'real-time-value-addition-handler'
 
     def consume(self, message):
-        self.add_record_in_real_time(bool(message['isPredict']), message['stocks'])
+        try:
+            self.add_record_in_real_time(bool(message['isPredict']), message['stocks'])
+        except Exception as ex:
+            print(ex)

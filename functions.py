@@ -4,6 +4,7 @@ import numpy as np
 from pymongo import MongoClient
 from sklearn.preprocessing import StandardScaler
 from setting import get_env
+from datetime import datetime
 
 # general variables
 _scaler = None
@@ -69,7 +70,12 @@ def inverse_transform(data):
 def create_value_output(Y, predicts):
     Y['return_predictions'] = predicts
     Y['prediction_movements'] = ['Up' if predict > 0 else 'Down' for predict in predicts]
+    Y['convert_movements'] = [0 if predict > 0 else 1 for predict in predicts]
     Y['real_movements'] = [ 'Up' if y > 0 else 'Down' for y in Y['return']]
     Y['hit'] = [ 1 if y[1]['real_movements'] == y[1]['prediction_movements'] else 0 for y in Y.iterrows()]
     Y['investment_value'] = [y[1]['return'] if y[1]['prediction_movements'] == 'Up' else 0 for y in Y.iterrows()]
     return Y
+
+# get current date and time
+def get_current_datatime():
+    return datetime.now()
