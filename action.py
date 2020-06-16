@@ -25,10 +25,12 @@ class Action:
     def add_record_in_real_time(self, is_predict, stocks):
         _collection, _action = (self._prediction_collection, self._predict) if is_predict else (self._training_collection, self._train)
         self._db[_collection].insert_many(stocks)
-        _stock_name = stocks[0]['name']
-        _data = functions.load_dataframe(_collection, _stock_name)
-        _data = functions.apply_standardization(_data)
-        _action(_data, _stock_name)
+        for stock_name in functions.get_all_stocks_initials(stocks):
+            print(f'#### analyzing: {stock_name}')
+            _data = functions.load_dataframe(_collection, stock_name)
+            _data = functions.apply_standardization(_data)
+            _action(_data, stock_name)
+            print(f'#### analysis finished: {stock_name} \n')
 
     def _save_predict(self, initials, output_predict):
         self._api_stub.live_prediction({
@@ -46,6 +48,7 @@ class Action:
             })
 
     def _predict(self, data, stock):
+        print(f'predict: {stock}')
         _initials = functions.get_stock_name(stock)
         _test_x, _test_y = functions.get_only_normalized_values(data, return_real_value=True, to_numpy=False)
         _model = neural_network.load(_initials)
@@ -55,6 +58,7 @@ class Action:
         self._save_predict(_initials, _output_predict)
 
     def _train(self, data, stock, _epochs=1000, _batch_size=128, _verbose=0, _optimizer='adam', _loss='mean_squared_error'):
+        print(f'train: {stock}')
         _train_x, _train_y, _test_x, _test_y = functions.splitting(data)
         _model = neural_network.build(_train_x.shape[1])
         _model.compile(optimizer=_optimizer, loss=_loss)

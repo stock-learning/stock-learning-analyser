@@ -9,7 +9,4 @@ class DailyPredictionClosingHandler(Action):
         self.primitive_name = 'daily-prediction-closing-handler'
 
     def consume(self, message):
-        try:
-            self.finalize_daily_prediction()
-        except Exception as ex:
-            print(ex)
+        self.finalize_daily_prediction()

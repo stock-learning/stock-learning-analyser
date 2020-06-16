@@ -23,25 +23,33 @@ def get_stock_name(stock_name):
 def load_dataframe(collection, stock):
     _db = connect_mongo()
     _collection = _db[collection]
-    _data = pd.DataFrame(list(_collection.find({'name': {'$eq': stock}}, {'_id': 0, 'name': 0})))
+    _data = pd.DataFrame(list(_collection.find({'name': {'$eq': stock}}, {'_id': 0, 'name': 0, '__v': 0, 'date': 0, 'createdAt': 0, 'updatedAt': 0})))
     return _data
+
+def get_all_stocks_initials(stocks):
+    return set(stocks[i]['name'] for i in range(len(stocks)))
 
 # normalizes data between 0 and 1 for better neural network performance
 def apply_standardization(data):
     global _scaler
     _scaler = StandardScaler()
-
-    data['close_Tomorrow'] = data['close'].shift(-1)
-    data['return'] = data['close_tomorrow'] - data['close']
     
-    for c in data.columns:
-        data[c+'_norm'] = _scaler.fit_transform(data[c].to_numpy().reshape(-1, 1))
+    try:
+        data['close_tomorrow'] = data['close'].shift(-1)
+        data['return'] = data['close_tomorrow'] - data['close']
+        
+        for c in data.columns:
+            data[c+'_norm'] = _scaler.fit_transform(data[c].to_numpy().reshape(-1, 1))
 
-    return data.dropna()
+        print(data)
+    except Exception as ex:
+        print(ex)
+    finally:
+        return data.dropna()
 
 # get normalized data
 def get_only_normalized_values(data, return_real_value=False, to_numpy=True):
-    _x = data[['open_norm','high_norm','low_norm','close_norm','volume_norm']]
+    _x = data[['open_norm','max_norm','min_norm','close_norm','volume_norm']]
 
     if return_real_value:
         _y = data[['return_norm', 'return']]
