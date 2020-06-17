@@ -23,7 +23,7 @@ def get_stock_name(stock_name):
 def load_dataframe(collection, stock):
     _db = connect_mongo()
     _collection = _db[collection]
-    _data = pd.DataFrame(list(_collection.find({'name': {'$eq': stock}}, {'_id': 0, 'name': 0, '__v': 0, 'date': 0, 'createdAt': 0, 'updatedAt': 0})))
+    _data = pd.DataFrame(list(_collection.find({'name': {'$eq': stock}}, {'_id': 0, 'name': 0, '__v': 0, 'date': 0, 'createdAt': 0, 'updatedAt': 0, 'fetchTime': 0})))
     return _data
 
 def get_all_stocks_initials(stocks):
@@ -86,4 +86,7 @@ def create_value_output(Y, predicts):
 
 # get current date and time
 def get_current_datatime():
-    return datetime.now()
+    return datetime.now().__str__()
+
+def null_remover(data):
+    np.where(np.isnan(data), 'undefined', data)

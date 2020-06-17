@@ -26,16 +26,22 @@ class Action:
         _collection, _action = (self._prediction_collection, self._predict) if is_predict else (self._training_collection, self._train)
         self._db[_collection].insert_many(stocks)
         for stock_name in functions.get_all_stocks_initials(stocks):
-            print(f'#### analyzing: {stock_name}')
-            _data = functions.load_dataframe(_collection, stock_name)
-            _data = functions.apply_standardization(_data)
-            _action(_data, stock_name)
-            print(f'#### analysis finished: {stock_name} \n')
+            try:
+                print(f'#### analyzing: {stock_name}')
+                _data = functions.load_dataframe(_collection, stock_name)
+                _data = functions.apply_standardization(_data)
+                _action(_data, stock_name)
+            except Exception as ex:
+                print(ex)
+            finally:
+                print(f'#### analysis finished: {stock_name} \n')
+                break
 
     def _save_predict(self, initials, output_predict):
+
         self._api_stub.live_prediction({
             'initials': initials,
-            'averageHit': output_predict['hit'].mean(),
+            'averageHit': functions.null_remover(output_predict['hit'].mean()),
             'totalReturn': output_predict['investment_value'].sum(),
             'buyHold': output_predict['return'].sum(),
             'updateDate': functions.get_current_datatime()
@@ -47,20 +53,19 @@ class Action:
                 'isSell': movement
             })
 
-    def _predict(self, data, stock):
-        print(f'predict: {stock}')
-        _initials = functions.get_stock_name(stock)
+    def _predict(self, data, stock_name):
+        print(f'predict: {stock_name}')
         _test_x, _test_y = functions.get_only_normalized_values(data, return_real_value=True, to_numpy=False)
-        _model = neural_network.load(_initials)
+        _model = neural_network.load(stock_name)
         _predict = _model.predict(_test_x)
         _predict = functions.inverse_transform(_predict)
         _output_predict = functions.create_value_output(_test_y, _predict)
-        self._save_predict(_initials, _output_predict)
+        self._save_predict(stock_name, _output_predict)
 
-    def _train(self, data, stock, _epochs=1000, _batch_size=128, _verbose=0, _optimizer='adam', _loss='mean_squared_error'):
-        print(f'train: {stock}')
+    def _train(self, data, stock_name, _epochs=1000, _batch_size=128, _verbose=0, _optimizer='adam', _loss='mean_squared_error'):
+        print(f'train: {stock_name}')
         _train_x, _train_y, _test_x, _test_y = functions.splitting(data)
         _model = neural_network.build(_train_x.shape[1])
         _model.compile(optimizer=_optimizer, loss=_loss)
         _model.fit(_train_x, _train_y, epochs=_epochs, batch_size=_batch_size, validation_data=(_test_x, _test_y), verbose=_verbose)
-        _model.save(f'models/model_{stock}')
+        _model.save(f'models/model_{stock_name}')
