@@ -35,10 +35,8 @@ class Action:
                 print(ex)
             finally:
                 print(f'#### analysis finished: {stock_name} \n')
-                break
 
     def _save_predict(self, initials, output_predict):
-
         self._api_stub.live_prediction({
             'initials': initials,
             'averageHit': functions.null_remover(output_predict['hit'].mean()),
