@@ -45,10 +45,13 @@ class Action:
             'updateDate': functions.get_current_datatime()
         })
 
-        for movement in output_predict['convert_movements']:
+        output_predict = output_predict.reset_index()   
+        output_list_predict = output_predict.values.tolist()
+        for movement in output_list_predict:
             self._api_stub.live_prediction_movement({
                 'initials': initials,
-                'isSell': movement
+                'date': functions.convert_date(movement[0]),
+                'isSell': movement[5]
             })
 
     def _predict(self, data, stock_name):

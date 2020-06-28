@@ -5,9 +5,16 @@ from handler.daily_prediction_startup_handler import DailyPredictionStartupHandl
 from handler.daily_prediction_closing_handler import DailyPredictionClosingHandler
 from handler.real_time_value_addition_handler import RealTimeValueAdditionHandler
 from setting import get_env
+from os import path, mkdir
 
 
 if __name__ == '__main__':
+    _models_path = path.dirname(__file__) + '\\models'
+    if not path.isdir(_models_path):
+        mkdir(_models_path)
+
+    print(f'Models path: {_models_path}')
+
     print('initialized server...')
     _server = RabbitMQServer(get_env('QUEUE_NAME'), get_env('RABBIT_HOST'))
     _api_stub = ApiStub(_server)

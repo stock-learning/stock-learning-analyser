@@ -23,7 +23,14 @@ def get_stock_name(stock_name):
 def load_dataframe(collection, stock):
     _db = connect_mongo()
     _collection = _db[collection]
-    _data = pd.DataFrame(list(_collection.find({'name': {'$eq': stock}}, {'_id': 0, 'name': 0, '__v': 0, 'date': 0, 'createdAt': 0, 'updatedAt': 0, 'fetchTime': 0})))
+    _data = pd.DataFrame(list(_collection.find({'name': {'$eq': stock}}, {'_id': 0, 'name': 0, '__v': 0, 'createdAt': 0, 'updatedAt': 0})))
+
+    if 'date' in _data.columns:
+        _data['date'] = pd.to_datetime(_data['date'])
+        _data.set_index('date', inplace=True)
+    else:
+        _data['fetchTime'] = pd.to_datetime(_data['fetchTime'])
+        _data.set_index('fetchTime', inplace=True)
     return _data
 
 def get_all_stocks_initials(stocks):
@@ -40,8 +47,6 @@ def apply_standardization(data):
         
         for c in data.columns:
             data[c+'_norm'] = _scaler.fit_transform(data[c].to_numpy().reshape(-1, 1))
-
-        print(data)
     except Exception as ex:
         print(ex)
     finally:
@@ -87,6 +92,9 @@ def create_value_output(Y, predicts):
 # get current date and time
 def get_current_datatime():
     return datetime.now().__str__()
+
+def convert_date(timestamp):
+    return datetime.strptime(timestamp.__str__().split('.')[0], '%Y-%m-%d %H:%M:%S').__str__()
 
 def null_remover(data):
     np.where(np.isnan(data), 'undefined', data)
